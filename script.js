@@ -1,8 +1,8 @@
 // Global Constants
-const apiKey = "MY_API_KEY"
-const gifContainer = document.querySelector(".gif-container")
+const movieContainer = document.querySelector(".movies-container")
 
-let movies = {
+
+let fakeMoviesAPI = {
     "dates": {
         "maximum": "2023-06-05",
         "minimum": "2023-04-18"
@@ -77,20 +77,35 @@ let movies = {
     "total_results": 1951
 }
 
+let firstMovie = fakeMoviesAPI.results[0]
 
+function generateMovieCard(movieObject){
+    // create start
+    let star = document.createElement('span');
+    star.classList.add('star')
+    let starContent = document.createTextNode('⭐️');
+    star.append(starContent);
+    document.body.appendChild(star);
 
+    // create rating
+    let rating = document.createElement('span');
+    rating.classList.add('rating');
+    let ratingContent = document.createTextNode(movieObject.vote_average);
+    rating.appendChild(ratingContent);
 
-/**
- * Update the DOM to display results from the Giphy API query.
- *
- * @param {Object} results - An array of results containing each item
- *                           returned by the response from the Giphy API.
- *
- */
-function displayResults(results) {
-  results.forEach(result => {
-    gifContainer.innerHTML += `
-    <img src="link"> </img>
-    `
-  })
+    // create average container
+    let averageContainer = document.createElement('div');
+    averageContainer.classList.add('average');
+    averageContainer.appendChild(star)
+    averageContainer.appendChild(rating);
+    document.body.appendChild(averageContainer);
+
+    let image = document.createElement('img');
+    image.src = 'https://image.tmdb.org/t/p/w342' + movieObject.poster_path;
+    document.body.insertBefore(image, averageContainer);
+
 }
+
+generateMovieCard(fakeMoviesAPI.results[0]);
+
+
