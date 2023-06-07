@@ -98,12 +98,24 @@ function generateMovieCard(movieObject){
     averageContainer.classList.add('average');
     averageContainer.appendChild(star)
     averageContainer.appendChild(rating);
-    document.body.appendChild(averageContainer);
+    
 
+    // image tag
     let image = document.createElement('img');
     image.src = 'https://image.tmdb.org/t/p/w342' + movieObject.poster_path;
-    document.body.insertBefore(image, averageContainer);
+   
+    // create title
+    let title = document.createElement('p');
+    title.classList.add('title');
+    title.textContent = movieObject.original_title;
+    
 
+    let movie = document.createElement('section');
+    movie.classList.add('movie');
+    movie.appendChild(image);
+    movie.appendChild(averageContainer);
+    movie.appendChild(title);
+    document.body.appendChild(movie)
 }
 
 generateMovieCard(fakeMoviesAPI.results[0]);
