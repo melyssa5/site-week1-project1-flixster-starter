@@ -1,5 +1,7 @@
 // Global Constants
-const movieContainer = document.querySelector("#movies-grid")
+const apiKey = "628cef3f5279ee9c6a1a09173da5a3ba";
+const movieContainer = document.querySelector("#movies-grid");
+
 
 
 let fakeMoviesAPI = {
@@ -152,9 +154,7 @@ let firstMovie = fakeMoviesAPI.results[0]
 function displayMovies(moviesArray) {
     moviesArray.forEach(movie => {
         movieContainer.appendChild(generateMovieCard(movie))
-        
     });
-
   }
 
 function generateMovieCard(movieObject){
@@ -194,10 +194,27 @@ function generateMovieCard(movieObject){
     movie.appendChild(image);
     movie.appendChild(averageContainer);
     movie.appendChild(title);
-
     return movie;
 }
 
-displayMovies(fakeMoviesAPI.results);
+
+    async function getNowPlaying(){
+        const response = await fetch("https://api.themoviedb.org/3/movie/now_playing?api_key=" + apiKey);
+        const jsonResponse = await response.json();
+        return jsonResponse.results;
+    }
+
+
+
+window.onload = async function () {
+    console.log(await getNowPlaying());
+    displayMovies(await getNowPlaying());
+
+   
+  }
+
+
+
+
 
 
