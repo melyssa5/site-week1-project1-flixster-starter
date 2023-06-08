@@ -25,11 +25,17 @@
     justify-items: center;
     align-content: space-evenly;
     align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: 50px;
+    grid-gap: 50px;
   }
 
 
+  .movie-card{
+    justify-self: center;
+    background-color: green;
+  }
 
+  
 
 
   .movie-title {
