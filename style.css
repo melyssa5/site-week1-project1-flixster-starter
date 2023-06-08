@@ -13,10 +13,23 @@
   
   h1 {
     text-transform: uppercase;
-    text-align: center;
     margin: 20px 0;
+    text-align: center;
+    flex: 1 0;
   }
-  
+
+
+  .movie-title {
+    color: white;
+    font-weight: bold;
+  }
+
+
+  .average{
+    color: white;
+  }
+
+
 
 
   

@@ -1,5 +1,5 @@
 // Global Constants
-const movieContainer = document.querySelector(".movies-container")
+const movieContainer = document.querySelector("#movies-grid")
 
 
 let fakeMoviesAPI = {
@@ -79,6 +79,21 @@ let fakeMoviesAPI = {
 
 let firstMovie = fakeMoviesAPI.results[0]
 
+/**
+ * Update the DOM to display results from the Giphy API query.
+ *
+ * @param {Object} results - An array of results containing each item
+ *                           returned by the response from the Giphy API.
+ *
+ */
+function displayMovies(moviesArray) {
+    moviesArray.forEach(movie => {
+        movieContainer.appendChild(generateMovieCard(movie))
+        
+    });
+
+  }
+
 function generateMovieCard(movieObject){
     // create start
     let star = document.createElement('span');
@@ -87,9 +102,9 @@ function generateMovieCard(movieObject){
     star.append(starContent);
     document.body.appendChild(star);
 
-    // create rating
+    // create movie votes element
     let rating = document.createElement('span');
-    rating.classList.add('rating');
+    rating.classList.add('movie-votes');
     let ratingContent = document.createTextNode(movieObject.vote_average);
     rating.appendChild(ratingContent);
 
@@ -99,25 +114,28 @@ function generateMovieCard(movieObject){
     averageContainer.appendChild(star)
     averageContainer.appendChild(rating);
     
-
-    // image tag
+    // create movie image element
     let image = document.createElement('img');
+    image.classList.add('movie-poster');
     image.src = 'https://image.tmdb.org/t/p/w342' + movieObject.poster_path;
    
-    // create title
+    // create movie title element
     let title = document.createElement('p');
-    title.classList.add('title');
+    title.classList.add('movie-title');
     title.textContent = movieObject.original_title;
     
 
     let movie = document.createElement('section');
     movie.classList.add('movie');
+    movie.setAttribute('id', 'movie-card')
     movie.appendChild(image);
     movie.appendChild(averageContainer);
     movie.appendChild(title);
-    document.body.appendChild(movie)
+    //movieContainer.appendChild(movie)
+    return movie;
 }
 
 generateMovieCard(fakeMoviesAPI.results[0]);
+displayMovies(fakeMoviesAPI.results);
 
 
