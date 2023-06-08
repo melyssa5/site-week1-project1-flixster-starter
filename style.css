@@ -18,6 +18,22 @@
     flex: 1 0;
   }
 
+  #movies-grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    justify-content: space-evenly;
+    justify-items: center;
+    align-content: space-evenly;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+
+ 
+
+  #movie-card{
+    background-color: pink;
+  }
+
 
   .movie-title {
     color: white;
