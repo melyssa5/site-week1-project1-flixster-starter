@@ -9,16 +9,21 @@
 </head>
 <body>
     <div id="top-part">
-        <h1>Flixter</h1>
+        <h1>🍿Flixter</h1>
     </div>
     <form id="search-form">
         <input id="search-input" required name="search" placeholder="Find a movie"/>
         <button id="search-button" type="submit" class="search-btn">Search Movie</button>
     </form>
+
+    <button id="clear-search" type="button"> hi </button>
+
     <h2>Now Playing</h2>
-    <div id="movies-grid"></div>
+    <div id="movies-grid">
+        <div id="movies-data"></div>
+    </div>
     
-    <button onclick="handleLoadMore()" class="hidden" id="load-more-movies-btn" type="button"> Load More Movies</button>
+    <button class="hidden" id="load-more-movies-btn" type="button"> Load More Movies</button>
 
 
 </body>

@@ -1,14 +1,20 @@
 // Global Constants
 const apiKey = "628cef3f5279ee9c6a1a09173da5a3ba";
 const movieContainer = document.querySelector("#movies-grid");
+const currentMoviesContainer = document.querySelector("#movies-data");
+
+let searchTerm = "cat"
 
 // Object that keeps track of the state of the website
 const state = {
     apiPage: 1,
-    searchTerm: "dog",
+   //searchTerm: "dog",
   }
 
 const searchPage = 1
+let previousResults = currentMoviesContainer; 
+
+const startPage = document.getElementsByClassName("movie-card");
 
 
 // Page Elements
@@ -16,8 +22,9 @@ const loadButton = document.getElementById("load-more-movies-btn");
 
 const searchButton = document.getElementById("search-button");
 
-console.log(searchButton)
+const input = document.getElementById("search-input");
 
+const clearButton = document.getElementById("clear-search")
 
 /**
  * Update the DOM to display results from the Giphy API query.
@@ -27,11 +34,15 @@ console.log(searchButton)
  *
  */
 function displayMovies(moviesArray) {
+    const dataBox = document.querySelector("#movies-data")
     moviesArray.forEach(movie => {
-        movieContainer.appendChild(generateMovieCard(movie))
+        dataBox.appendChild(generateMovieCard(movie))
     });
 }
 
+// function savePrevious(){
+//     previousResults = document.getElementsByClassName("movie-card");
+// }
 
 function validImage(path){
     if(path.includes("null")){
@@ -42,6 +53,7 @@ function validImage(path){
     }
 }
 function generateMovieCard(movieObject) {
+
     // create start
     let star = document.createElement('span');
     star.classList.add('star')
@@ -64,14 +76,8 @@ function generateMovieCard(movieObject) {
     // create movie image element
     let image = document.createElement('img');
     image.classList.add('movie-poster');
+    image.setAttribute('data-id', movieObject.id);
     image.src =  validImage('https://image.tmdb.org/t/p/w342' + movieObject.poster_path);
-    //image.src = "https://image.tmdb.org/t/p/w342/odGrK2wAxKbIIiKwOzrUOgOyozm.jpg"
-    // try{
-    //     image.src = 'https://image.tmdb.org/t/p/w342' + movieObject.poster_path;
-    // }catch(e ){
-    //     image.alt  = "movie poster could not be found"
-    // }
-    //image.src = 'https://image.tmdb.org/t/p/w342' + movieObject.poster_path;
 
     // create movie title element
     let title = document.createElement('p');
@@ -80,13 +86,15 @@ function generateMovieCard(movieObject) {
 
 
     let movie = document.createElement('section');
-    movie.classList.add('movie');
-    movie.setAttribute('id', 'movie-card')
+    movie.classList.add('movie-card');
     movie.appendChild(image);
     movie.appendChild(averageContainer);
     movie.appendChild(title);
     return movie;
 }
+
+
+
 
 
 async function getNowPlaying() {
@@ -97,28 +105,46 @@ async function getNowPlaying() {
 }
 
 async function getMovieSearch(){
-    const response = await fetch(`https://api.themoviedb.org/3/search/movie?query=${state.searchTerm}&page=${searchPage}&api_key=${apiKey}`);
+    const response = await fetch(`https://api.themoviedb.org/3/search/movie?query=${searchTerm}&page=${searchPage}&api_key=${apiKey}`);
     const jsonResponse = await response.json();
     return jsonResponse.results;
 }
 
 
-async function handleLoadMore(){
-   displayMovies(await getNowPlaying());
+async function handleLoadMore(event){
+   //event.preventDefault();
+   const moreMovies = await getNowPlaying();
+   console.log(moreMovies);
+   displayMovies(moreMovies);
 }
 
-// async function handleSearch(){
-//     const searchResults = await getMovieSearch();
-//     displayMovies(searchResults);
 
-// }
+async function handleSearch(event) {
+    // YOUR CODE HERE
+    event.preventDefault();
+    searchTerm = input.value;
+    console.log(searchTerm)
+    const searchResults = await getMovieSearch();
+    console.log(searchResults);
+    document.querySelectorAll('.movie-card').forEach(e => e.remove());
+    displayMovies(searchResults);
+  }
+
+async function handleCloseSearch(event){
+    document.querySelectorAll('.movie-card').forEach(e => e.remove());
+    state.apiPage = 1;
+    document.getElementById("search-input").value = ''
+    displayMovies(await getNowPlaying());
+}
+
+
 
 window.onload = async function () {
-    //displayMovies(await getNowPlaying());
-    console.log(await getNowPlaying())
-    console.log(await getMovieSearch())
-    displayMovies(await getMovieSearch());
-    // searchButton.addEventListener('click', handleSearch());
+    displayMovies(await getNowPlaying());
+    searchButton.addEventListener('click', handleSearch);
+    loadButton.addEventListener('click', handleLoadMore);
+    clearButton.addEventListener('click', handleCloseSearch);
+
 
 
 }
