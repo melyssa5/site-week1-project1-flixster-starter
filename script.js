@@ -3,15 +3,16 @@ const apiKey = "628cef3f5279ee9c6a1a09173da5a3ba";
 const movieContainer = document.querySelector("#movies-grid");
 const currentMoviesContainer = document.querySelector("#movies-data");
 
+
 let searchTerm = ""
 
 // Object that keeps track of the state of the website
 const state = {
-    apiPage: 1,
+    apiPage: 0,
    //searchTerm: "dog",
   }
 
-const searchPage = 1
+
 let previousResults = currentMoviesContainer; 
 
 const startPage = document.getElementsByClassName("movie-card");
@@ -25,6 +26,9 @@ const searchButton = document.getElementById("search-button");
 const input = document.getElementById("search-input");
 
 const clearButton = document.getElementById("clear-search")
+
+const header = document.getElementsByTagName("h2")[0];
+console.log(header)
 
 
 function validImage(path){
@@ -102,9 +106,10 @@ function generateMovieCard(movieObject) {
 
 
 async function getNowPlaying() {
+    state.apiPage += 1;
     const response = await fetch(`https://api.themoviedb.org/3/movie/now_playing?page=${state.apiPage}&api_key=${apiKey}`);
     const jsonResponse = await response.json();
-    state.apiPage += 1;
+    header.innerText = "Now Playing"
     const array = jsonResponse.results;
     array.forEach(movie => {
                 movieContainer.appendChild(generateMovieCard(movie))
@@ -112,11 +117,15 @@ async function getNowPlaying() {
 
 }
 
+let searchPage = 0;
+
 async function getMovieSearch(){
-    const response = await fetch(`https://api.themoviedb.org/3/search/movie?query=${searchTerm}&page=${searchPage}&api_key=${apiKey}`);
+    searchPage += 1;
+    const response = await fetch(`https://api.themoviedb.org/3/search/movie?query=${searchTerm}&page=${state.apiPage}&api_key=${apiKey}`);
     const jsonResponse = await response.json();
     const array = jsonResponse.results;
-    movieContainer.innerHTML = '';
+    header.innerText = "Search Results"
+    //movieContainer.innerHTML = '';
     array.forEach(movie => {
         movieContainer.appendChild(generateMovieCard(movie))
     });
@@ -131,9 +140,12 @@ async function getMoreInfo(movieID){
 
 async function handleLoadMore(event){
    //event.preventDefault();
-   const moreMovies = await getNowPlaying();
-   console.log(moreMovies);
-   displayMovies(moreMovies);
+   if (header.innerText=="Now Playing"){
+    await getNowPlaying();
+   }
+   else if (header.innerText=="Search Results"){
+    await getMovieSearch();
+   }
 }
 
 
@@ -142,6 +154,7 @@ async function handleSearch(event) {
     event.preventDefault();
     searchTerm = input.value;
     console.log(searchTerm)
+    movieContainer.innerHTML = '';
     const searchResults = await getMovieSearch();
     console.log(searchResults);
 
@@ -150,8 +163,8 @@ async function handleSearch(event) {
   }
 
 async function handleCloseSearch(event){
-    document.querySelectorAll('.movie-card').forEach(e => e.remove());
-    state.apiPage = 1;
+    movieContainer.innerHTML = '';
+    state.apiPage = 0;
     document.getElementById("search-input").value = ''
     await getNowPlaying();
 }
