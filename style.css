@@ -18,6 +18,9 @@
     flex: 1 0;
   }
 
+  .button{
+    display: none;
+  }
   #movies-grid{
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;

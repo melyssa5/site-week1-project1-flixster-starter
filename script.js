@@ -2,8 +2,24 @@
 const apiKey = "628cef3f5279ee9c6a1a09173da5a3ba";
 const movieContainer = document.querySelector("#movies-grid");
 
-     
-  
+// Object that keeps track of the state of the website
+const state = {
+    apiPage: 1,
+    searchTerm: "cat",
+  }
+
+const searchPage = 1
+
+
+// Page Elements
+const loadButton = document.getElementById("load-more-movies-btn");
+
+
+
+
+
+
+
 
 /**
  * Update the DOM to display results from the Giphy API query.
@@ -16,9 +32,9 @@ function displayMovies(moviesArray) {
     moviesArray.forEach(movie => {
         movieContainer.appendChild(generateMovieCard(movie))
     });
-  }
+}
 
-function generateMovieCard(movieObject){
+function generateMovieCard(movieObject) {
     // create start
     let star = document.createElement('span');
     star.classList.add('star')
@@ -37,17 +53,17 @@ function generateMovieCard(movieObject){
     averageContainer.classList.add('average');
     averageContainer.appendChild(star)
     averageContainer.appendChild(rating);
-    
+
     // create movie image element
     let image = document.createElement('img');
     image.classList.add('movie-poster');
     image.src = 'https://image.tmdb.org/t/p/w342' + movieObject.poster_path;
-   
+
     // create movie title element
     let title = document.createElement('p');
     title.classList.add('movie-title');
     title.textContent = movieObject.original_title;
-    
+
 
     let movie = document.createElement('section');
     movie.classList.add('movie');
@@ -59,20 +75,30 @@ function generateMovieCard(movieObject){
 }
 
 
-    async function getNowPlaying(){
-        const response = await fetch("https://api.themoviedb.org/3/movie/now_playing?api_key=" + apiKey);
-        const jsonResponse = await response.json();
-        return jsonResponse.results;
-    }
+async function getNowPlaying() {
+    const response = await fetch(`https://api.themoviedb.org/3/movie/now_playing?page=${state.apiPage}&api_key=${apiKey}`);
+    const jsonResponse = await response.json();
+    state.apiPage += 1;
+    return jsonResponse.results;
+}
 
+async function getMovieSearch(){
+    const response = await fetch(`https://api.themoviedb.org/3/search/movie?query=${state.searchTerm}&page=${searchPage}&api_key=${apiKey}`);
+    const jsonResponse = await response.json();
+    return jsonResponse.results;
+}
+
+
+
+async function handleLoadMore(){
+   displayMovies(await getNowPlaying())
+}
 
 
 window.onload = async function () {
-    console.log(await getNowPlaying());
+    console.log(await getMovieSearch());
     displayMovies(await getNowPlaying());
-
-   
-  }
+}
 
 
 
