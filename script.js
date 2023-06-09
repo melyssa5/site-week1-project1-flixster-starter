@@ -5,7 +5,7 @@ const movieContainer = document.querySelector("#movies-grid");
 // Object that keeps track of the state of the website
 const state = {
     apiPage: 1,
-    searchTerm: "cat",
+    searchTerm: "dog",
   }
 
 const searchPage = 1
@@ -14,11 +14,9 @@ const searchPage = 1
 // Page Elements
 const loadButton = document.getElementById("load-more-movies-btn");
 
+const searchButton = document.getElementById("search-button");
 
-
-
-
-
+console.log(searchButton)
 
 
 /**
@@ -34,6 +32,15 @@ function displayMovies(moviesArray) {
     });
 }
 
+
+function validImage(path){
+    if(path.includes("null")){
+        return "https://image.tmdb.org/t/p/w342/odGrK2wAxKbIIiKwOzrUOgOyozm.jpg";
+    }
+    else{
+        return path;
+    }
+}
 function generateMovieCard(movieObject) {
     // create start
     let star = document.createElement('span');
@@ -57,7 +64,14 @@ function generateMovieCard(movieObject) {
     // create movie image element
     let image = document.createElement('img');
     image.classList.add('movie-poster');
-    image.src = 'https://image.tmdb.org/t/p/w342' + movieObject.poster_path;
+    image.src =  validImage('https://image.tmdb.org/t/p/w342' + movieObject.poster_path);
+    //image.src = "https://image.tmdb.org/t/p/w342/odGrK2wAxKbIIiKwOzrUOgOyozm.jpg"
+    // try{
+    //     image.src = 'https://image.tmdb.org/t/p/w342' + movieObject.poster_path;
+    // }catch(e ){
+    //     image.alt  = "movie poster could not be found"
+    // }
+    //image.src = 'https://image.tmdb.org/t/p/w342' + movieObject.poster_path;
 
     // create movie title element
     let title = document.createElement('p');
@@ -89,15 +103,24 @@ async function getMovieSearch(){
 }
 
 
-
 async function handleLoadMore(){
-   displayMovies(await getNowPlaying())
+   displayMovies(await getNowPlaying());
 }
 
+// async function handleSearch(){
+//     const searchResults = await getMovieSearch();
+//     displayMovies(searchResults);
+
+// }
 
 window.onload = async function () {
-    console.log(await getMovieSearch());
-    displayMovies(await getNowPlaying());
+    //displayMovies(await getNowPlaying());
+    console.log(await getNowPlaying())
+    console.log(await getMovieSearch())
+    displayMovies(await getMovieSearch());
+    // searchButton.addEventListener('click', handleSearch());
+
+
 }
 
 
