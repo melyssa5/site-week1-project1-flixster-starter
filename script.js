@@ -3,7 +3,7 @@ const apiKey = "628cef3f5279ee9c6a1a09173da5a3ba";
 const movieContainer = document.querySelector("#movies-grid");
 const currentMoviesContainer = document.querySelector("#movies-data");
 
-let searchTerm = "cat"
+let searchTerm = ""
 
 // Object that keeps track of the state of the website
 const state = {
@@ -36,7 +36,7 @@ const clearButton = document.getElementById("clear-search")
 function displayMovies(moviesArray) {
     const dataBox = document.querySelector("#movies-data")
     moviesArray.forEach(movie => {
-        dataBox.appendChild(generateMovieCard(movie))
+        movieContainer.appendChild(generateMovieCard(movie))
     });
 }
 
@@ -93,7 +93,28 @@ function generateMovieCard(movieObject) {
     return movie;
 }
 
+function generatePopUp(popupInfo){
+    let desc = document.createElement('p');
+    desc.classList.add("movie-description");
+    let descContent = document.createTextNode(popupInfo.overview);
+    desc.append(descContent);
 
+    let image = document.createElement('img');
+    image.classList.add('movie-backdrop');
+    image.src =  validImage('https://image.tmdb.org/t/p/w342' + movieObject.backdrop_path);
+
+    let details = document.createElement('p');
+    details.classList.add("movie-details");
+    let detailsContent = document.createTextNode(popupInfo.runtime + "|" + popupInfo.release_date + "|" + popupInfo.original_title + "|⭐️" + popupInfo.vote_average)
+    details.textContent = detailsContent;
+
+    let moviePopup = document.createElement('section');
+    moviePopup.classList.add('movie-popup');
+    moviePopup.appendChild(image);
+    moviePopup.appendChild(details);
+    moviePopup.appendChild(desc);
+    return moviePopup
+}
 
 
 
@@ -108,6 +129,12 @@ async function getMovieSearch(){
     const response = await fetch(`https://api.themoviedb.org/3/search/movie?query=${searchTerm}&page=${searchPage}&api_key=${apiKey}`);
     const jsonResponse = await response.json();
     return jsonResponse.results;
+}
+
+async function getMoreInfo(movieID){
+    const response = await fetch(`https://api.themoviedb.org/3/movie/${movieID}?api_key=${apiKey}`);
+    const jsonResponse = await response.json();
+    return jsonResponse;
 }
 
 
@@ -126,8 +153,9 @@ async function handleSearch(event) {
     console.log(searchTerm)
     const searchResults = await getMovieSearch();
     console.log(searchResults);
-    document.querySelectorAll('.movie-card').forEach(e => e.remove());
-    displayMovies(searchResults);
+
+    // document.querySelectorAll('.movie-card').forEach(e => e.remove());
+    // displayMovies(searchResults);
   }
 
 async function handleCloseSearch(event){
@@ -144,9 +172,8 @@ window.onload = async function () {
     searchButton.addEventListener('click', handleSearch);
     loadButton.addEventListener('click', handleLoadMore);
     clearButton.addEventListener('click', handleCloseSearch);
-
-
-
+    const resp = await getMoreInfo('343611');
+    console.log(resp);
 }
 
 
