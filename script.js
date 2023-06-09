@@ -26,23 +26,6 @@ const input = document.getElementById("search-input");
 
 const clearButton = document.getElementById("clear-search")
 
-/**
- * Update the DOM to display results from the Giphy API query.
- *
- * @param {Object} results - An array of results containing each item
- *                           returned by the response from the Giphy API.
- *
- */
-function displayMovies(moviesArray) {
-    const dataBox = document.querySelector("#movies-data")
-    moviesArray.forEach(movie => {
-        movieContainer.appendChild(generateMovieCard(movie))
-    });
-}
-
-// function savePrevious(){
-//     previousResults = document.getElementsByClassName("movie-card");
-// }
 
 function validImage(path){
     if(path.includes("null")){
@@ -93,28 +76,28 @@ function generateMovieCard(movieObject) {
     return movie;
 }
 
-function generatePopUp(popupInfo){
-    let desc = document.createElement('p');
-    desc.classList.add("movie-description");
-    let descContent = document.createTextNode(popupInfo.overview);
-    desc.append(descContent);
+// function generatePopUp(popupInfo){
+//     let desc = document.createElement('p');
+//     desc.classList.add("movie-description");
+//     let descContent = document.createTextNode(popupInfo.overview);
+//     desc.append(descContent);
 
-    let image = document.createElement('img');
-    image.classList.add('movie-backdrop');
-    image.src =  validImage('https://image.tmdb.org/t/p/w342' + movieObject.backdrop_path);
+//     let image = document.createElement('img');
+//     image.classList.add('movie-backdrop');
+//     image.src =  validImage('https://image.tmdb.org/t/p/w342' + movieObject.backdrop_path);
 
-    let details = document.createElement('p');
-    details.classList.add("movie-details");
-    let detailsContent = document.createTextNode(popupInfo.runtime + "|" + popupInfo.release_date + "|" + popupInfo.original_title + "|⭐️" + popupInfo.vote_average)
-    details.textContent = detailsContent;
+//     let details = document.createElement('p');
+//     details.classList.add("movie-details");
+//     let detailsContent = document.createTextNode(popupInfo.runtime + "|" + popupInfo.release_date + "|" + popupInfo.original_title + "|⭐️" + popupInfo.vote_average)
+//     details.textContent = detailsContent;
 
-    let moviePopup = document.createElement('section');
-    moviePopup.classList.add('movie-popup');
-    moviePopup.appendChild(image);
-    moviePopup.appendChild(details);
-    moviePopup.appendChild(desc);
-    return moviePopup
-}
+//     let moviePopup = document.createElement('section');
+//     moviePopup.classList.add('movie-popup');
+//     moviePopup.appendChild(image);
+//     moviePopup.appendChild(details);
+//     moviePopup.appendChild(desc);
+//     return moviePopup
+// }
 
 
 
@@ -122,13 +105,21 @@ async function getNowPlaying() {
     const response = await fetch(`https://api.themoviedb.org/3/movie/now_playing?page=${state.apiPage}&api_key=${apiKey}`);
     const jsonResponse = await response.json();
     state.apiPage += 1;
-    return jsonResponse.results;
+    const array = jsonResponse.results;
+    array.forEach(movie => {
+                movieContainer.appendChild(generateMovieCard(movie))
+            });
+
 }
 
 async function getMovieSearch(){
     const response = await fetch(`https://api.themoviedb.org/3/search/movie?query=${searchTerm}&page=${searchPage}&api_key=${apiKey}`);
     const jsonResponse = await response.json();
-    return jsonResponse.results;
+    const array = jsonResponse.results;
+    movieContainer.innerHTML = '';
+    array.forEach(movie => {
+        movieContainer.appendChild(generateMovieCard(movie))
+    });
 }
 
 async function getMoreInfo(movieID){
@@ -162,18 +153,16 @@ async function handleCloseSearch(event){
     document.querySelectorAll('.movie-card').forEach(e => e.remove());
     state.apiPage = 1;
     document.getElementById("search-input").value = ''
-    displayMovies(await getNowPlaying());
+    await getNowPlaying();
 }
 
 
 
 window.onload = async function () {
-    displayMovies(await getNowPlaying());
+    await getNowPlaying();
     searchButton.addEventListener('click', handleSearch);
     loadButton.addEventListener('click', handleLoadMore);
     clearButton.addEventListener('click', handleCloseSearch);
-    const resp = await getMoreInfo('343611');
-    console.log(resp);
 }
 
 

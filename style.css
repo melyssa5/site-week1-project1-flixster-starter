@@ -31,7 +31,8 @@
     margin-bottom: 50px;
     grid-gap: 50px;
   } */
-  #movies-data{
+
+  #movies-grid{
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     justify-content: space-evenly;
