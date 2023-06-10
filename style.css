@@ -26,16 +26,6 @@
   .button{
     display: none;
   }
-  /* #movies-grid{
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    justify-content: space-evenly;
-    justify-items: center;
-    align-content: space-evenly;
-    align-items: center;
-    margin-bottom: 50px;
-    grid-gap: 50px;
-  } */
 
   #movies-grid{
     display: grid;
@@ -48,23 +38,8 @@
     grid-gap: 50px;
   }
 
-  /* .movie-card .movie-popup{
-    visibility: hidden;
-    width: 160px;
-    background-color: #555;
-    color: #fff;
-    text-align: center;
-    border-radius: 6px;
-    padding: 8px 0;
-    position: absolute;
-    z-index: 1;
-    bottom: 125%;
-    left: 50%;
-    margin-left: -80px;
-  } */
-
   .popup-outer{
-    background-color: aquamarine(0,0,0,0,3);
+    background-color: rgba(0, 0, .2, .3);
     opacity: 0;
     position: fixed;
     top: 0;
@@ -87,6 +62,11 @@
 
   .popup-inner{
     background-color: pink;
+    border-radius: 5px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0,0.3);
+    padding: 15px 25px;
+    text-align: center;
+    width: 80%;
   }
 
   #search-area{

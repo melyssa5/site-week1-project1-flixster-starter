@@ -108,7 +108,7 @@ function generatePopUp(popupInfo){
 
 
     details.append(runtime)
-    details.append(' runtime | ')
+    details.append(' minutes | ')
     details.append(release);
     details.append(linebreak)
     details.append(title);
@@ -172,7 +172,7 @@ async function handleLoadMore(event){
    }
 }
 
-// const outer = document.getElementById("outer-popup")
+
 
 async function handleImageClick(event){
     // create pop up element
