@@ -34,7 +34,7 @@ Deployed Application (optional): [Flixster Deployed Site](ADD_LINK_HERE)
 #### Stretch Features
 
 - [ ] Deploy website using GitHub Pages.
-- [ ] Allow user to view more details about a movie within a popup.
+- [x] Allow user to view more details about a movie within a popup.
 - [ ] Improve the user experience through CSS & animation.
 - [ ] Allow movie video trailers to be played using [embedded YouTube](https://support.google.com/youtube/answer/171780?hl=en)
 - [ ] Implement anything else that you can get done to improve the app functionality!
@@ -53,7 +53,7 @@ I do think the topics discussed helped me get the functionality of the website. 
 
 - If you had more time, what would you have done differently? Would you have added additional features? Changed the way your project responded to a particular event, etc.
   
-I would've added more accessibility features such as alternate text and making sure it works with a screen reader. I would also have wanted to do more with error catching and handling for when I encountered missing data.
+I would've added more accessibility features such as alternate text and making sure it works with a screen reader. I would also have wanted to do more with error catching and handling for when I encountered missing data. I would also fix up the CSS of the pop-up to make it accessible.
 
 - Reflect on your project demo, what went well? Were there things that maybe didn't go as planned? Did you notice something that your peer did that you would like to try next time?
 
