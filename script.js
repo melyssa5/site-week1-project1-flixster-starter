@@ -94,7 +94,7 @@ function generatePopUp(popupInfo){
    
     let close = document.createElement('button');
     close.setAttribute('id', 'close-button');
-    close.value = 'close';
+    close.innerHTML = 'close';
 
     let runtime = document.createTextNode(popupInfo.runtime);
     let release = document.createTextNode(popupInfo.release_date);
