@@ -95,6 +95,7 @@ function generatePopUp(popupInfo){
     let close = document.createElement('button');
     close.setAttribute('id', 'close-button');
     close.innerHTML = 'close';
+    close.addEventListener('click', handleClosePop);
 
     let runtime = document.createTextNode(popupInfo.runtime);
     let release = document.createTextNode(popupInfo.release_date);
@@ -205,6 +206,11 @@ async function handleCloseSearch(event){
     await getNowPlaying();
 }
 
+function handleClosePop(event){
+    let container = document.getElementById('outer-popup');
+    console.log(container);
+    container.classList.remove('open');
+}
 
 
 window.onload = async function () {
