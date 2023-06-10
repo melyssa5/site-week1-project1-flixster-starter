@@ -18,6 +18,11 @@
     flex: 1 0;
   }
 
+  h2 {
+    position: relative;
+    left:20px;
+  }
+
   .button{
     display: none;
   }
@@ -43,7 +48,58 @@
     grid-gap: 50px;
   }
 
+  /* .movie-card .movie-popup{
+    visibility: hidden;
+    width: 160px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -80px;
+  } */
 
+  .popup-outer{
+    background-color: aquamarine(0,0,0,0,3);
+    opacity: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    transition: all 0.3s ease-in-out;
+    z-index: -1;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .popup-outer.open{
+    opacity: 1;
+    z-index: 999;
+  }
+
+
+  .popup-inner{
+    background-color: pink;
+  }
+
+  #search-area{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #loading-area{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
 
   .movie-title {

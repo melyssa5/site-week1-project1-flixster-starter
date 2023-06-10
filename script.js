@@ -32,7 +32,7 @@ console.log(header)
 
 
 function validImage(path){
-    if(path.includes("null")){
+    if(path.includes("null") || path.includes("undefined")){
         return "https://image.tmdb.org/t/p/w342/odGrK2wAxKbIIiKwOzrUOgOyozm.jpg";
     }
     else{
@@ -40,7 +40,6 @@ function validImage(path){
     }
 }
 function generateMovieCard(movieObject) {
-
     // create start
     let star = document.createElement('span');
     star.classList.add('star')
@@ -64,6 +63,7 @@ function generateMovieCard(movieObject) {
     let image = document.createElement('img');
     image.classList.add('movie-poster');
     image.setAttribute('data-id', movieObject.id);
+    image.addEventListener('click', handleImageClick);
     image.src =  validImage('https://image.tmdb.org/t/p/w342' + movieObject.poster_path);
 
     // create movie title element
@@ -77,31 +77,55 @@ function generateMovieCard(movieObject) {
     movie.appendChild(image);
     movie.appendChild(averageContainer);
     movie.appendChild(title);
+
     return movie;
 }
 
-// function generatePopUp(popupInfo){
-//     let desc = document.createElement('p');
-//     desc.classList.add("movie-description");
-//     let descContent = document.createTextNode(popupInfo.overview);
-//     desc.append(descContent);
 
-//     let image = document.createElement('img');
-//     image.classList.add('movie-backdrop');
-//     image.src =  validImage('https://image.tmdb.org/t/p/w342' + movieObject.backdrop_path);
+function generatePopUp(popupInfo){
+    let desc = document.createElement('p');
+    desc.classList.add("movie-description");
+    let descContent = document.createTextNode(popupInfo.overview);
+    desc.append(descContent);
 
-//     let details = document.createElement('p');
-//     details.classList.add("movie-details");
-//     let detailsContent = document.createTextNode(popupInfo.runtime + "|" + popupInfo.release_date + "|" + popupInfo.original_title + "|⭐️" + popupInfo.vote_average)
-//     details.textContent = detailsContent;
+    let image = document.createElement('img');
+    image.classList.add('movie-backdrop');
+    image.src =  validImage('https://image.tmdb.org/t/p/w342' + popupInfo.backdrop_path);
 
-//     let moviePopup = document.createElement('section');
-//     moviePopup.classList.add('movie-popup');
-//     moviePopup.appendChild(image);
-//     moviePopup.appendChild(details);
-//     moviePopup.appendChild(desc);
-//     return moviePopup
-// }
+    let details = document.createElement('span');
+    details.classList.add("movie-details");
+   
+    let close = document.createElement('button');
+    close.setAttribute('id', 'close-button');
+    close.value = 'close';
+
+    let runtime = document.createTextNode(popupInfo.runtime);
+    let release = document.createTextNode(popupInfo.release_date);
+    let title = document.createTextNode(popupInfo.original_title);
+    let star = document.createTextNode('⭐️');
+    let rating = document.createTextNode(popupInfo.vote_average);
+    let linebreak = document.createTextNode(' |  ')
+
+
+    details.append(runtime)
+    details.append(' runtime | ')
+    details.append(release);
+    details.append(linebreak)
+    details.append(title);
+    details.append(linebreak)
+    details.append(star);
+    details.append(rating);
+
+    let moviePopup = document.createElement('div');
+    moviePopup.classList.add('popup-inner');
+    moviePopup.appendChild(image);
+    moviePopup.appendChild(details);
+    moviePopup.appendChild(desc);
+    moviePopup.append(close);
+
+    document.getElementById('outer-popup').appendChild(moviePopup)
+    return moviePopup
+}
 
 
 
@@ -120,7 +144,7 @@ async function getNowPlaying() {
 let searchPage = 0;
 
 async function getMovieSearch(){
-    searchPage += 1;
+    state.apiPage += 1;
     const response = await fetch(`https://api.themoviedb.org/3/search/movie?query=${searchTerm}&page=${state.apiPage}&api_key=${apiKey}`);
     const jsonResponse = await response.json();
     const array = jsonResponse.results;
@@ -146,6 +170,23 @@ async function handleLoadMore(event){
    else if (header.innerText=="Search Results"){
     await getMovieSearch();
    }
+}
+
+// const outer = document.getElementById("outer-popup")
+
+async function handleImageClick(event){
+    // create pop up element
+    let popup = document.createElement('div');
+    popup.classList.add("popup-outer");
+    popup.setAttribute('id', 'outer-popup')
+    document.body.append(popup)
+    console.log(popup)
+
+    popup.classList.add('open');
+    let id = this.dataset.id;
+    let result = generatePopUp(await getMoreInfo(id)); 
+    let um = popup.append(result)
+   
 }
 
 
@@ -176,6 +217,7 @@ window.onload = async function () {
     searchButton.addEventListener('click', handleSearch);
     loadButton.addEventListener('click', handleLoadMore);
     clearButton.addEventListener('click', handleCloseSearch);
+    
 }
 
 
