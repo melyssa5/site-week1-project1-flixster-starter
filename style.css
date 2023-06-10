@@ -38,6 +38,7 @@
     grid-gap: 50px;
   }
 
+
   .popup-outer{
     background-color: rgba(0, 0, .2, .3);
     opacity: 0;
@@ -87,6 +88,10 @@
     font-weight: bold;
   }
 
+  #close-button{
+    height: 20px;
+    width: 20%;
+  }
 
   .average{
     color: white;

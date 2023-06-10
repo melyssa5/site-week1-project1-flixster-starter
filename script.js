@@ -7,10 +7,7 @@ const currentMoviesContainer = document.querySelector("#movies-data");
 let searchTerm = ""
 
 // Object that keeps track of the state of the website
-const state = {
-    apiPage: 0,
-   //searchTerm: "dog",
-  }
+let apiPage = 0;
 
 
 let previousResults = currentMoviesContainer; 
@@ -130,8 +127,8 @@ function generatePopUp(popupInfo){
 
 
 async function getNowPlaying() {
-    state.apiPage += 1;
-    const response = await fetch(`https://api.themoviedb.org/3/movie/now_playing?page=${state.apiPage}&api_key=${apiKey}`);
+    apiPage += 1;
+    const response = await fetch(`https://api.themoviedb.org/3/movie/now_playing?page=${apiPage}&api_key=${apiKey}`);
     const jsonResponse = await response.json();
     header.innerText = "Now Playing"
     const array = jsonResponse.results;
@@ -141,11 +138,11 @@ async function getNowPlaying() {
 
 }
 
-let searchPage = 0;
+
 
 async function getMovieSearch(){
-    state.apiPage += 1;
-    const response = await fetch(`https://api.themoviedb.org/3/search/movie?query=${searchTerm}&page=${state.apiPage}&api_key=${apiKey}`);
+    apiPage += 1;
+    const response = await fetch(`https://api.themoviedb.org/3/search/movie?query=${searchTerm}&page=${apiPage}&api_key=${apiKey}`);
     const jsonResponse = await response.json();
     const array = jsonResponse.results;
     header.innerText = "Search Results"
@@ -192,20 +189,18 @@ async function handleImageClick(event){
 
 async function handleSearch(event) {
     // YOUR CODE HERE
+    apiPage = 0;
     event.preventDefault();
     searchTerm = input.value;
     console.log(searchTerm)
     movieContainer.innerHTML = '';
     const searchResults = await getMovieSearch();
     console.log(searchResults);
-
-    // document.querySelectorAll('.movie-card').forEach(e => e.remove());
-    // displayMovies(searchResults);
   }
 
 async function handleCloseSearch(event){
     movieContainer.innerHTML = '';
-    state.apiPage = 0;
+    apiPage = 0;
     document.getElementById("search-input").value = ''
     await getNowPlaying();
 }
